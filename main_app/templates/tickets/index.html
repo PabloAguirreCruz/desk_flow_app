@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Tickets</h1>
+
+{% if tickets %}
+    {% for ticket in tickets %}
+        <div class="ticket-card priority-{{ ticket.priority }}">
+            <h3><a href="{% url 'ticket-detail' ticket.id %}">{{ ticket.title }}</a></h3>
+            <p>{{ ticket.description|truncatewords:20 }}</p>
+            <span class="badge">{{ ticket.get_status_display }}</span>
+            <span class="badge">{{ ticket.get_priority_display }} priority</span>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No tickets yet. <a href="/admin/">Create one in the admin</a> to get started.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>DeskFlow</h1>
+<p>An IT help desk built with Django. Submit a ticket, track its progress, get back to work.</p>
+<p><a href="{% url 'ticket-index' %}">View all tickets &rarr;</a></p>
+{% endblock %}

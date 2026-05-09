@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'ticket-index' %}">&larr; Back to tickets</a>
+
+<div class="ticket-card priority-{{ ticket.priority }}">
+    <h1>{{ ticket.title }}</h1>
+    <p><span class="badge">{{ ticket.get_status_display }}</span> <span class="badge">{{ ticket.get_priority_display }} priority</span></p>
+    <p>{{ ticket.description }}</p>
+    <p><small>Created {{ ticket.created_at|date:"F j, Y, g:i a" }}</small></p>
+
+    <h3>Tags</h3>
+    {% if ticket.tags.all %}
+        {% for tag in ticket.tags.all %}
+            <span class="badge">{{ tag.name }}</span>
+        {% endfor %}
+    {% else %}
+        <p><em>No tags yet.</em></p>
+    {% endif %}
+
+    <h3>Comments</h3>
+    {% for comment in ticket.comment_set.all %}
+        <div class="ticket-card">
+            <p>{{ comment.text }}</p>
+            <small>{{ comment.created_at|date:"M j, g:i a" }}</small>
+        </div>
+    {% empty %}
+        <p><em>No comments yet.</em></p>
+    {% endfor %}
+</div>
+{% endblock %}
