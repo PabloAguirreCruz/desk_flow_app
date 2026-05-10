@@ -5,20 +5,45 @@
 
 <div class="ticket-card priority-{{ ticket.priority }}">
     <h1>{{ ticket.title }}</h1>
-    <p><span class="badge">{{ ticket.get_status_display }}</span> <span class="badge">{{ ticket.get_priority_display }} priority</span></p>
+    <p>
+        <span class="badge">{{ ticket.get_status_display }}</span>
+        <span class="badge">{{ ticket.get_priority_display }} priority</span>
+    </p>
     <p>{{ ticket.description }}</p>
     <p><small>Created {{ ticket.created_at|date:"F j, Y, g:i a" }}</small></p>
+
+    <p>
+        <a href="{% url 'ticket-update' ticket.id %}">Edit</a>
+        ·
+        <a href="{% url 'ticket-delete' ticket.id %}">Delete</a>
+    </p>
 
     <h3>Tags</h3>
     {% if ticket.tags.all %}
         {% for tag in ticket.tags.all %}
-            <span class="badge">{{ tag.name }}</span>
+            <span class="badge">
+                {{ tag.name }}
+                <a href="{% url 'remove-tag' ticket.id tag.id %}">&times;</a>
+            </span>
         {% endfor %}
     {% else %}
         <p><em>No tags yet.</em></p>
     {% endif %}
 
+    {% if tags %}
+        <p>Add a tag:</p>
+        {% for tag in tags %}
+            <a href="{% url 'associate-tag' ticket.id tag.id %}" class="badge">+ {{ tag.name }}</a>
+        {% endfor %}
+    {% endif %}
+
     <h3>Comments</h3>
+    <form method="post" action="{% url 'add-comment' ticket.id %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Post comment</button>
+    </form>
+
     {% for comment in ticket.comment_set.all %}
         <div class="ticket-card">
             <p>{{ comment.text }}</p>

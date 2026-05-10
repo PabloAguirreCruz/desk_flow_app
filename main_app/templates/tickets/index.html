@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>Tickets</h1>
+<p><a href="{% url 'ticket-create' %}">+ New Ticket</a></p>
 
 {% if tickets %}
     {% for ticket in tickets %}
