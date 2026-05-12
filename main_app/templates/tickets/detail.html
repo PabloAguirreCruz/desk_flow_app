@@ -1,58 +1,69 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{% url 'ticket-index' %}">&larr; Back to tickets</a>
+<p><a href="{% url 'ticket-index' %}">&larr; Back to tickets</a></p>
 
-<div class="ticket-card priority-{{ ticket.priority }}">
-    <h1>{{ ticket.title }}</h1>
-    <p>
+<article class="ticket-card ticket-card--priority-{{ ticket.priority }}">
+    <div class="detail-header">
+        <h1>{{ ticket.title }}</h1>
+    </div>
+
+    <div class="detail-meta">
         <span class="badge">{{ ticket.get_status_display }}</span>
-        <span class="badge">{{ ticket.get_priority_display }} priority</span>
-    </p>
+        <span class="badge badge--priority-{{ ticket.priority }}">{{ ticket.get_priority_display }} priority</span>
+    </div>
+
     <p>{{ ticket.description }}</p>
-    <p><small>Created {{ ticket.created_at|date:"F j, Y, g:i a" }}</small></p>
+    <p class="muted">Created {{ ticket.created_at|date:"F j, Y, g:i a" }}</p>
 
     {% if ticket.user == user %}
-    <p>
-        <a href="{% url 'ticket-update' ticket.id %}">Edit</a>
-        ·
-        <a href="{% url 'ticket-delete' ticket.id %}">Delete</a>
-    </p>
-{% endif %}
+        <div class="detail-actions">
+            <a href="{% url 'ticket-update' ticket.id %}" class="btn btn--secondary">Edit</a>
+            <a href="{% url 'ticket-delete' ticket.id %}" class="btn btn--danger">Delete</a>
+        </div>
+    {% endif %}
 
     <h3>Tags</h3>
     {% if ticket.tags.all %}
-        {% for tag in ticket.tags.all %}
-            <span class="badge">
-                {{ tag.name }}
-                <a href="{% url 'remove-tag' ticket.id tag.id %}">&times;</a>
-            </span>
-        {% endfor %}
+        <div class="tag-picker">
+            {% for tag in ticket.tags.all %}
+                <span class="badge">
+                    {{ tag.name }}
+                    {% if ticket.user == user %}
+                        <a href="{% url 'remove-tag' ticket.id tag.id %}">&times;</a>
+                    {% endif %}
+                </span>
+            {% endfor %}
+        </div>
     {% else %}
-        <p><em>No tags yet.</em></p>
+        <p class="muted"><em>No tags yet.</em></p>
     {% endif %}
 
-    {% if tags %}
-        <p>Add a tag:</p>
-        {% for tag in tags %}
-            <a href="{% url 'associate-tag' ticket.id tag.id %}" class="badge">+ {{ tag.name }}</a>
-        {% endfor %}
+    {% if tags and ticket.user == user %}
+        <p class="muted">Add a tag:</p>
+        <div class="tag-picker">
+            {% for tag in tags %}
+                <a href="{% url 'associate-tag' ticket.id tag.id %}" class="badge">+ {{ tag.name }}</a>
+            {% endfor %}
+        </div>
     {% endif %}
 
     <h3>Comments</h3>
-    <form method="post" action="{% url 'add-comment' ticket.id %}">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <button type="submit">Post comment</button>
-    </form>
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'add-comment' ticket.id %}">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn--primary">Post comment</button>
+        </form>
+    {% endif %}
 
     {% for comment in ticket.comment_set.all %}
-        <div class="ticket-card">
+        <div class="comment">
             <p>{{ comment.text }}</p>
-            <small>{{ comment.created_at|date:"M j, g:i a" }}</small>
+            <small class="muted">{{ comment.created_at|date:"M j, g:i a" }}</small>
         </div>
     {% empty %}
-        <p><em>No comments yet.</em></p>
+        <p class="muted"><em>No comments yet.</em></p>
     {% endfor %}
-</div>
+</article>
 {% endblock %}

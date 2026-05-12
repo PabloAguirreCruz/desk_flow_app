@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ tag.name }}</h1>
-<p>Color: {{ tag.color }}</p>
-<p>
-    <a href="{% url 'tag-update' tag.id %}">Edit</a>
-    <a href="{% url 'tag-delete' tag.id %}">Delete</a>
-</p>
-<a href="{% url 'tag-index' %}">&larr; All tags</a>
+<p><a href="{% url 'tag-index' %}">&larr; All tags</a></p>
+
+<article class="ticket-card">
+    <h1>{{ tag.name }}</h1>
+    <p class="muted">Color: {{ tag.color }}</p>
+    <div class="detail-actions">
+        <a href="{% url 'tag-update' tag.id %}" class="btn btn--secondary">Edit</a>
+        <a href="{% url 'tag-delete' tag.id %}" class="btn btn--danger">Delete</a>
+    </div>
+</article>
 {% endblock %}

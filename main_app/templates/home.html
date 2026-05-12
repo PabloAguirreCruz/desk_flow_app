@@ -1,14 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>DeskFlow</h1>
-<p>An IT help desk built with Django. Submit a ticket, track its progress, get back to work.</p>
+<section class="hero">
+    <h1>DeskFlow</h1>
+    <p>An IT help desk built with Django. Submit a ticket, track its progress, get back to work.</p>
 
-{% if user.is_authenticated %}
-    <p><a href="{% url 'ticket-index' %}">View your tickets &rarr;</a></p>
-{% else %}
-    <p>
-        <a href="{% url 'signup' %}">Sign up</a> or <a href="{% url 'login' %}">log in</a> to get started.
-    </p>
-{% endif %}
+    {% if user.is_authenticated %}
+        <div class="hero__actions">
+            <a href="{% url 'ticket-index' %}" class="btn btn--primary">View your tickets</a>
+        </div>
+    {% else %}
+        <div class="hero__actions">
+            <a href="{% url 'signup' %}" class="btn btn--primary">Sign up</a>
+            <a href="{% url 'login' %}" class="btn btn--secondary">Log in</a>
+        </div>
+    {% endif %}
+</section>
 {% endblock %}

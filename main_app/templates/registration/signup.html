@@ -4,14 +4,16 @@
 <h1>Sign Up</h1>
 
 {% if error_message %}
-    <p style="color: red;">{{ error_message }}</p>
+    <p style="color: var(--color-danger);">{{ error_message }}</p>
 {% endif %}
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Sign up</button>
+    <div class="detail-actions">
+        <button type="submit" class="btn btn--primary">Sign up</button>
+    </div>
 </form>
 
-<p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+<p class="muted">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
 {% endblock %}
