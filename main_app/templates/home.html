@@ -3,5 +3,12 @@
 {% block content %}
 <h1>DeskFlow</h1>
 <p>An IT help desk built with Django. Submit a ticket, track its progress, get back to work.</p>
-<p><a href="{% url 'ticket-index' %}">View all tickets &rarr;</a></p>
+
+{% if user.is_authenticated %}
+    <p><a href="{% url 'ticket-index' %}">View your tickets &rarr;</a></p>
+{% else %}
+    <p>
+        <a href="{% url 'signup' %}">Sign up</a> or <a href="{% url 'login' %}">log in</a> to get started.
+    </p>
+{% endif %}
 {% endblock %}

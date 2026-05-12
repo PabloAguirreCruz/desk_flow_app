@@ -12,11 +12,13 @@
     <p>{{ ticket.description }}</p>
     <p><small>Created {{ ticket.created_at|date:"F j, Y, g:i a" }}</small></p>
 
+    {% if ticket.user == user %}
     <p>
         <a href="{% url 'ticket-update' ticket.id %}">Edit</a>
         ·
         <a href="{% url 'ticket-delete' ticket.id %}">Delete</a>
     </p>
+{% endif %}
 
     <h3>Tags</h3>
     {% if ticket.tags.all %}

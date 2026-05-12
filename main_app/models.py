@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 PRIORITIES = (
     ('L', 'Low'),
@@ -33,6 +34,7 @@ class Ticket(models.Model):
     status = models.CharField(max_length=1, choices=STATUSES, default=STATUSES[0][0])
     created_at = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField(Tag)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
